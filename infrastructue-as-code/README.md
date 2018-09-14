@@ -23,3 +23,5 @@ ansible-playbook -i hosts server_profile.yml
 ```
 
 In the spirit of "Leave no Trace", the playbook `clean.yml` will remove all artifacts.
+
+Read the [whitepaper](https://github.com/HewlettPackard/oneview-ansible-samples/blob/master/infrastructue-as-code/infrastructure-as-code.md).
