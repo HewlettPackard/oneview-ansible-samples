@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This how to guide and accompanying [GitHub repository](https://github.com/HewlettPackard/oneview-ansible-in-container) will show how to use the HPE [oneview-ansible](https://github.com/HewlettPackard/oneview-ansible) module from a containerized version on the [Docker Store](https://store.docker.com/community/images/hewlettpackardenterprise/oneview-ansible-debian) to manage and configure HPE infrastructure.
+This how to guide and accompanying [GitHub repository](https://github.com/HewlettPackard/oneview-ansible-samples/tree/master/oneview-ansible-in-container) will show how to use the HPE [oneview-ansible](https://github.com/HewlettPackard/oneview-ansible) module from a containerized version on the [Docker Store](https://store.docker.com/community/images/hewlettpackardenterprise/oneview-ansible-debian) to manage and configure HPE infrastructure.
 
 ## HPE oneview-ansible in a container
 
