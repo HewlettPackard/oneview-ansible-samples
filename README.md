@@ -8,4 +8,4 @@ See [oneview-ansible](https://github.com/HewlettPackard/oneview-ansible) for ins
 
 ## Support / Contributing
 
-Community invovlement is encouraged. See CONTRIBUTING.md for more details.
+Community invovlement is encouraged. See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
