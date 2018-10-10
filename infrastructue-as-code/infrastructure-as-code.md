@@ -10,7 +10,7 @@ Benefits of this infrasructure as code approach include, complete datacenter aut
 
 ## Setup
 
-You will need the [HPE OneView  Ansible modules](https://github.com/HewlettPackard/oneview-ansible). See the README for installation instructions. The playbooks for this example can be found [here](https://github.com/HewlettPackard/oneview-ansible-samples/tree/master/infrastructue-as-code).
+You will need the [HPE OneView  Ansible modules](https://github.com/HewlettPackard/oneview-ansible). See the README for installation instructions. The playbooks for this example can be found [here](https://github.com/HewlettPackard/oneview-ansible-samples/tree/master/infrastructue-as-code). Or, you can skip the installation and run the Ansible playbooks from a containerized version on the [Docker Store](https://store.docker.com/community/images/hewlettpackardenterprise/oneview-ansible-debian)
 
 ## HPE OneView essentials
 
