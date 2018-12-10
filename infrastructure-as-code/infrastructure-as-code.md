@@ -4,13 +4,13 @@
 
 ## Introduction
 
-This whitepaper and accomanying [GitHub repository](https://github.com/HewlettPackard/oneview-ansible-samples) are meant to assist customers and partners in provisioning physical infrastructure, under management by [HPE OneView](https://hpe.com/info/oneview), using [Ansible](https://www.ansible.com/) playbooks. These playbooks then can be checked into source control (eg. git) allowing you to treat infrastructure as code.
+This whitepaper and accompanying [GitHub repository](https://github.com/HewlettPackard/oneview-ansible-samples) are meant to assist customers and partners in provisioning physical infrastructure, under management by [HPE OneView](https://hpe.com/info/oneview), using [Ansible](https://www.ansible.com/) playbooks. These playbooks then can be checked into source control (eg. git) allowing you to treat infrastructure as code.
 
-Benefits of this infrasructure as code approach include, complete datacenter automation, consistant reproducability, versioning, and roll back.
+Benefits of this infrastructure as code approach include, complete datacenter automation, consistent reproducibility, versioning, and roll back.
 
 ## Setup
 
-You will need the [HPE OneView  Ansible modules](https://github.com/HewlettPackard/oneview-ansible). See the README for installation instructions. The playbooks for this example can be found [here](https://github.com/HewlettPackard/oneview-ansible-samples/tree/master/infrastructue-as-code). Or, you can skip the installation and run the Ansible playbooks from a containerized version on the [Docker Store](https://store.docker.com/community/images/hewlettpackardenterprise/oneview-ansible-debian)
+You will need the [HPE OneView  Ansible modules](https://github.com/HewlettPackard/oneview-ansible). See the README for installation instructions. The playbooks for this example can be found [here](https://github.com/HewlettPackard/oneview-ansible-samples/tree/master/infrastructure-as-code). Or, you can skip the installation and run the Ansible playbooks from a containerized version on the [Docker Store](https://store.docker.com/community/images/hewlettpackardenterprise/oneview-ansible-debian)
 
 ## HPE OneView essentials
 
@@ -40,7 +40,7 @@ This example will configure a hardware server with boot settings and a network c
 
 ### Create the server profile template
 
-The playbook [`server_profile_template.yml`](https://github.com/HewlettPackard/oneview-ansible-samples/blob/master/infrastructue-as-code/server_profile_template.yml) will create the server profile template.
+The playbook [`server_profile_template.yml`](https://github.com/HewlettPackard/oneview-ansible-samples/blob/master/infrastructure-as-code/server_profile_template.yml) will create the server profile template.
 
 Run the command:
 
@@ -56,7 +56,7 @@ Server profile template
 
 ### Create and apply the server profile
 
-Now that we have a server profile template, we can run [`server-profile.yml`](https://github.com/HewlettPackard/oneview-ansible-samples/blob/master/infrastructue-as-code/server_profile.yml) which will create a server profile and assign it to specific server which will configure the hardware. Then the playbook will boot the server.
+Now that we have a server profile template, we can run [`server-profile.yml`](https://github.com/HewlettPackard/oneview-ansible-samples/blob/master/infrastructure-as-code/server_profile.yml) which will create a server profile and assign it to specific server which will configure the hardware. Then the playbook will boot the server.
 
 ```bash
 ansible-playbook -i hosts server_profile.yml
@@ -70,7 +70,7 @@ Server profile
 
 ### Clean up
 
-[`clean.yml`](https://github.com/HewlettPackard/oneview-ansible-samples/blob/master/infrastructue-as-code/clean.yml) will power off the server, delete the server profile, and delete the server profile template, restoring the system to the state before the example.
+[`clean.yml`](https://github.com/HewlettPackard/oneview-ansible-samples/blob/master/infrastructure-as-code/clean.yml) will power off the server, delete the server profile, and delete the server profile template, restoring the system to the state before the example.
 
 ### Conclusion
 
