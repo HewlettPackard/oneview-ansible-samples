@@ -34,7 +34,7 @@
       delegate_to: localhost
 
     - name: Get the network
-      set_fact: network={{ ethernet_networks.0 }}
+      set_fact: network={{ ethernet_networks }}
  
     - name: Create a server profile template
       oneview_server_profile_template:
