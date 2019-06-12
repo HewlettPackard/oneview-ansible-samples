@@ -13,7 +13,7 @@ Docker containers provide a low friction way to get developer environments and C
 Docker volumes are storage that can be shared among containers and persist beyond the lifecycle of containers. Begin by creating a Docker volume
 
 ```bash
-docker volume create playbooks
+docker volume create --name playbooks
 ```
 
 Next run a container that can access the sample playbook and allow you to edit the playbooks.
