@@ -1,0 +1,115 @@
+##
+# Copyright 2017 Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Brought to you by the fine Folks at the America's Solution Center located in Beautiful Alpharetta GA...
+# Error free since 9 AM this morning!!!!
+###
+
+- hosts: all
+  gather_facts: yes
+  vars:
+    config: '{{ playbook_dir }}/oneview_config.json'
+    server_hardware_type_name: "SY 480 Gen10 1"
+    enclosure_group_name: "SYN109_EG"
+    auto_assign_server_hardware: "true"
+    
+  vars_prompt:
+
+    - name: osflavor 
+      prompt: "Please select the OS to Install.\n1- OS_ESXI\n2- OS_LINUX\n"
+      private: no
+    
+    - name: profile_name
+      prompt: "Please enter a name for the Server Profile.\n"
+      private: no
+
+    - name: ipaddr
+      prompt: "Please enter the server IP address.\n"
+      private: no
+   
+    - name: hostn
+      prompt: "Please enter  the Server Hostname.\n"
+      private: no
+
+  tasks:
+    - set_fact: osflavor=ESXIBOOT osbase=ESXIBASE ov_template=ESXi_Local_BootTemplate install=http://10.10.109.222/customesxi.iso source=ks.cfg.j2 destion=ks_custom67.cfg 
+      when: (osflavor == "1")
+
+    - set_fact: osflavor=LINUXBOOT2 osbase=LINUXBOOT ov_template=RHEL_Local_BootTemplate install=http://10.10.109.222/rhel75custom.iso source=ksrhel.cfg.k2 destion=rhelks.cfg
+      when: (osflavor == "2")
+
+    - debug: var=ipaddr
+    - debug: var=osbase
+    - debug: var=hostn
+
+    - name: create custom kickstart file
+      template:
+        src: "{{source}}"
+        dest: "/var/www/html/build/{{destion}}"
+
+    - name: Get sessionID
+      uri:
+        url: https://10.10.109.1/rest/login-sessions
+        validate_certs: no
+        method: POST
+        body_format: json
+        headers:
+           accept: "application/json"
+           Content-Type: "application/json"
+        body: {"userName":"administrator","password":"HP1nvent"}
+        status_code: 200
+        return_content: yes
+      register: sessionid
+      delegate_to: localhost
+
+    - name : Parsing sessionID
+      debug:
+        msg: "{{sessionid.json.sessionID}}"
+
+    - name : "Create Server Profile from Template - {{ profile_name }}"
+      oneview_server_profile:
+        config: "{{ config }}"
+        data:
+          name: "{{ profile_name }}"
+          serverProfileTemplateName: "{{ ov_template }}"
+      delegate_to: localhost   
+      register: mpHostInfo
+    - debug:
+        var: mpHostInfo
+
+    - name: Task to boot a system using an ISO from an HP iLO interface only if the system is an HP server
+      hpilo_boot:
+        host: "{{ server_hardware.mpHostInfo.mpHostName }}" 
+        login: hpadmin
+        password: atlpresales
+        media: cdrom
+        image: "{{ install }}" 
+      delegate_to: localhost
+#    - debug: var=ansible_facts
+
+# Waiting for the server boot to complete, test for Port 22
+    - name: wait for port 22 to become active
+      wait_for:
+        host: "{{ipaddr}}"
+        port: 22
+        delay: 20
+        state: started
+        timeout: 1600
+      delegate_to: localhost
+ 
+    - name: Remove file (delete file)
+      file:
+        path: "/var/www/html/build/{{destion}}"
+        state: absent

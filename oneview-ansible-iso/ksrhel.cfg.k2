@@ -1,0 +1,29 @@
+# (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+lang en_US.UTF-8
+keyboard us
+timezone --utc America/New_York
+text
+install
+skipx
+network  --bootproto=static --ip={{ipaddr}} --netmask=255.255.0.0 --gateway=10.10.1.4 --nameserver=10.10.197.3 --hostname={{hostn}}
+authconfig --enable shadow --enablemd5
+firstboot --enable
+cdrom
+rootpw HP1nvent
+ignoredisk --only-use=sda
+zerombr
+clearpart --all --initlabel
+autopart --type=lvm
+reboot
+
+# Disable firewall and selinux
+firewall --disabled
+selinux --disabled
+
+%pre
+%end
+
+%packages
+@Base
+@Core
+%end

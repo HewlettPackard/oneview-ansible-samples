@@ -1,0 +1,44 @@
+# Sample scripted installation file
+# Accept the VMware End User License Agreement
+vmaccepteula
+# Set the root password for the DCUI and ESXi Shell
+rootpw HP1nvent!
+# Install on the first local disk available on machine
+clearpart --firstdisk --overwritevmfs
+install --firstdisk=local --overwritevmfs
+# Set the network to DHCP on the first network adapater, use the specified hostname and # Create a portgroup for the VMs
+network --bootproto=static --addvmportgroup=1 --ip={{ipaddr}} --netmask=255.255.0.0 --gateway=10.10.1.4 --nameserver=10.10.197.3 --hostname={{hostn}} --device=vmnic0
+# reboots the host after the scripted installation is completed
+reboot
+
+
+
+%firstboot --interpreter=busybox
+# Add an extra nic to vSwitch0 (vmnic2)
+esxcli network vswitch standard uplink add --uplink-name=vmnic1 --vswitch-name=vSwitch0
+# Assign an IP-Address to the first VMkernel, this will be used for management
+# esxcli network ip interface ipv4 set --interface-name=vmk0 --type=dhcp
+# esxcli network vswitch standard portgroup add --portgroup-name=vMotion --vswitch-# name=vSwitch0
+esxcli network vswitch standard portgroup set --portgroup-name=vMotion
+esxcli network ip interface add --interface-name=vmk1 --portgroup-name=vMotion
+# esxcli network ip interface ipv4 set --interface-name=vmk1 --type=dhcp
+# Enable vMotion on the newly created VMkernel vmk1
+vim-cmd hostsvc/vmotion/vnic_set vmk1
+# Add new vSwitch for VM traffic, assign uplinks, create a portgroup and assign a VLAN ID
+# esxcli network vswitch standard add --vswitch-name=vSwitch1
+# esxcli network vswitch standard uplink add --uplink-name=vmnic1 --vswitch-name=vSwitch1
+# esxcli network vswitch standard uplink add --uplink-name=vmnic3 --vswitch-name=vSwitch1
+# esxcli network vswitch standard portgroup add --portgroup-name=Production --vswitch-name=vSwitch1
+# esxcli network vswitch standard portgroup set --portgroup-name=Production --vlan-id=10
+# Set DNS and hostname
+# esxcli system hostname set --fqdn=esxi5.localdomain
+esxcli network ip dns search add --domain=atlpss.hp.net
+esxcli network ip dns server add --server=10.10.197.3
+esxcli network ip dns server add --server=10.10.197.2
+# Set the default PSP for EMC V-MAX to Round Robin as that is our preferred load balancing mechanism
+# esxcli storage nmp satp set --default-psp VMW_PSP_RR --satp VMW_SATP_SYMM
+# Enable SSH and the ESXi Shell
+vim-cmd hostsvc/enable_ssh
+vim-cmd hostsvc/start_ssh
+vim-cmd hostsvc/enable_esx_shell
+vim-cmd hostsvc/start_esx_shell
