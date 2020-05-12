@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  vars:
+    ov_hostname: "{{ lookup('env', '10.10.109.1') }}"
+    ov_username: "{{ lookup('env', 'administartor') }}"
+    ov_password: "{{ lookup('env', 'HP1nvent') }}"
+    ov_api_version: "{{ lookup('env', '800') }}"
+    config: "{{ playbook_dir }}/oneview_config.json"
+    ov_template: "ESX_Automate_Cluster"
+    auto_assign_server_hardware: "true"
+    deployment_plan_name: "ESX67U1_Apr2019_SUT"
+  tasks:
+  - name: Read from settings.csv
+    read_csv:
+      path: settings.csv
+      delimiter: ","
+    register: settings
+    delegate_to: localhost
+  - name: Iterate through settings and create ESXi servers
+    include: vsphere_automate.yml
+    with_items: "{{ settings.list }}"
